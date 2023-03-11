@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "org.waveapi.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "MixinResourcePackManager"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

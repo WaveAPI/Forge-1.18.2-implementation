@@ -1,0 +1,42 @@
+# This is an example mods.toml file.
+# Any fields that aren't annotated with #optional are *required*!
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "All rights reserved" # Want to make your mod open source? Check out https://choosealicense.com/!
+
+# This is a URL to e.g. your GitHub or CurseForge issues page.
+# It will appear in any crash reports this mod is directly involved in.
+# issueTrackerURL="https://github.com/invalid/pleasechangeme/issues" #optional
+# A list of mods - how many allowed here is determined by the individual mod loader
+
+[[mods]]
+modId = "waveapi"
+
+version = "${version}"
+displayName = "WaveAPI"
+
+description = '''
+WaveAPI is a mod loader designed to run over other mod loaders
+'''
+
+# An (optional) dependency for your mod. Though technically not required,
+# it's always helpful to add these to stop your mod from loading when something is missing
+# rather than erroring out later
+[[dependencies.waveapi]]
+modId = "forge"
+mandatory = true # do you **need** this mod to be able to launch?
+# A version range using interval notation.
+# Brackets mean "inclusive" bounds, while parentheses mean "exclusive".
+versionRange = "[40,)" # This essentially means any forge >= 40
+ordering = "NONE" # Use this if you want your mod to be loaded specifically BEFORE or AFTER another mod
+side = "BOTH" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
+
+# And another dependency, use this if you want to require a certain Minecraft version.
+[[dependencies.waveapi]]
+modId = "minecraft"
+mandatory = true
+# See above for how to read this notation, this essentially means any
+# version of Minecraft from 1.18.2 (inclusive).
+versionRange = "[1.18.2,)"
+ordering = "NONE"
+side = "BOTH"
