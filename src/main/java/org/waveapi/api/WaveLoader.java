@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipFile;
 
 public class WaveLoader {
 
@@ -30,7 +31,7 @@ public class WaveLoader {
     private static boolean nextChanged = false;
     public static void init() {
 
-        File modFolder = new File("./waves");
+        File modFolder = new File("./mods");
         File[] mods = modFolder.listFiles();
 
         File modified = new File(Main.mainFolder, "modifCache.txt");
@@ -52,10 +53,19 @@ public class WaveLoader {
 
         for (File mod : mods) {
             try {
+                if (!mod.getName().endsWith(".jar")) {
+                    continue;
+                }
+                ZipFile file = new ZipFile(mod);
+                ;
+                if (file.getEntry("wave.yml") == null) {
+                    continue;
+                }
+
                 URL[] urls = new URL[] {mod.toURI().toURL()};
                 URLClassLoader classLoader = new URLClassLoader(urls, WaveLoader.class.getClassLoader());
 
-                URL yml = classLoader.getResource("mod.yml");
+                URL yml = classLoader.getResource("wave.yml");
                 if (yml == null) {
                     continue;
                 }
