@@ -1,16 +1,14 @@
 package org.waveapi;
 
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.waveapi.api.WaveLoader;
-import org.waveapi.api.content.items.WaveItem;
-import org.waveapi.api.mics.Side;
+import org.waveapi.api.content.items.WaveShapedRecipe;
+import org.waveapi.api.misc.Side;
 import org.waveapi.content.resources.LangManager;
 import org.waveapi.content.resources.ResourcePackManager;
+import org.waveapi.utils.FileUtil;
 
 import java.io.File;
 import java.util.Map;
@@ -41,8 +39,14 @@ public class Main {
 
 		for (Map.Entry<String, WaveLoader.WrappedWaveMod> mod : WaveLoader.getMods().entrySet()) {
 			bake = mod.getValue().changed;
+			if (bake) {
+				FileUtil.recursivelyDelete(new File(ResourcePackManager.getInstance().getPackDir(), "data/" + mod.getValue().mod.name));
+				FileUtil.recursivelyDelete(new File(ResourcePackManager.getInstance().getPackDir(), "assets/" + mod.getValue().mod.name));
+			}
 			mod.getValue().mod.init();
 		}
+
+		WaveShapedRecipe.build(new File(mainFolder, "resource_pack/data"));
 
 		if (Side.isClient()) {
 			LangManager.write();

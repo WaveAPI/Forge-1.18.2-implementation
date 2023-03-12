@@ -2,13 +2,16 @@ package org.waveapi.api.content.items;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.waveapi.api.WaveMod;
 import org.waveapi.api.content.items.models.ItemModel;
-import org.waveapi.api.mics.Side;
+import org.waveapi.api.misc.Side;
+import org.waveapi.api.world.entity.living.EntityPlayer;
+import org.waveapi.api.world.inventory.ItemUseResult;
+import org.waveapi.api.world.inventory.UseHand;
+import org.waveapi.content.items.CustomItemWrap;
 import org.waveapi.content.resources.LangManager;
 import org.waveapi.content.resources.ResourcePackManager;
 
@@ -26,11 +29,12 @@ public class WaveItem {
 
     private static LinkedList<WaveItem> toRegister = new LinkedList<>();
 
-    private static Registry<Item> registry;
+    private final Item.Settings settings;
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Item> event) {
         for (WaveItem item : toRegister) {
-            event.getRegistry().register(new Item(new Item.Settings()).setRegistryName(new Identifier(item.mod.name, item.id)));
+            item.item = new CustomItemWrap(item.settings, item).setRegistryName(new Identifier(item.mod.name, item.id));
+            event.getRegistry().register(item.item);
         }
         toRegister = null;
     }
@@ -38,6 +42,7 @@ public class WaveItem {
     public WaveItem(String id, WaveMod mod) {
         this.id = id;
         this.mod = mod;
+        this.settings = new Item.Settings();
 
         toRegister.add(this);
     }
@@ -46,10 +51,11 @@ public class WaveItem {
         return id;
     }
 
-    public void setModel(ItemModel model) {
+    public WaveItem setModel(ItemModel model) {
         if (Side.isClient() && bake) {
             model.build(ResourcePackManager.getInstance().getPackDir(), this);
         }
+        return this;
     }
 
     public WaveMod getMod() {
@@ -60,9 +66,24 @@ public class WaveItem {
         return item;
     }
 
-    public void addTranslation(String language, String name) {
+    public ItemUseResult onUse(org.waveapi.api.world.inventory.ItemStack item, UseHand hand, EntityPlayer player) {
+        return null;
+    }
+
+    public WaveItem setTab(WaveTab tab) {
+        settings.group(tab.group);
+        return this;
+    }
+
+    public WaveItem setMaxStackSize(int size) {
+        settings.maxCount(size);
+        return this;
+    }
+
+    public WaveItem addTranslation(String language, String name) {
         if (Side.isClient() && bake) {
             LangManager.addTranslation(mod.name, language, "item." + mod.name + "." + id, name);
         }
+        return this;
     }
 }
