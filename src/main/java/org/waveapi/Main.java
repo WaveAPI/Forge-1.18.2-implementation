@@ -27,9 +27,9 @@ public class Main {
 		LOGGER.info("Initializing");
 
 		try {
-			Class.forName("net.minecraft.client.MinecraftClient");
+			net.minecraft.client.MinecraftClient.getInstance();
 			Side.isServer = false;
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			Side.isServer = true;
 		}
 
