@@ -33,9 +33,7 @@ public class Main {
 			Side.isServer = true;
 		}
 
-		if (Side.isClient()) {
-			new ResourcePackManager();
-		}
+		new ResourcePackManager();
 
 		WaveLoader.init();
 
