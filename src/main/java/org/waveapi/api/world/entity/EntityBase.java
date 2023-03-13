@@ -20,4 +20,9 @@ public class EntityBase {
     public float getPitch() {
         return entity.getPitch();
     }
+
+
+    public boolean isAlive() {
+        return entity.isAlive();
+    }
 }
